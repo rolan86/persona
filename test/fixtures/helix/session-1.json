@@ -1,0 +1,9 @@
+{
+  "sessionId": "helix-abc",
+  "startedAt": "2026-04-11T09:00:00Z",
+  "taskContext": "refactor auth middleware",
+  "filesTouched": ["src/auth/middleware.ts"],
+  "discoveries": [
+    { "kind": "preference", "text": "chose direct editing over factory pattern" }
+  ]
+}
