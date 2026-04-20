@@ -12,7 +12,7 @@ export interface DossierGroup {
   theme: string;         // e.g. 'communication-style', 'git-workflow'
   summary: string;
   evidence: DossierEvidence[];
-  observation_ids: string[];
+  observation_ids: string[]; // format: `${source}:${sessionId}:${timestamp}`
 }
 
 export interface Dossier {
