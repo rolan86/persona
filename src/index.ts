@@ -6,6 +6,9 @@ import { runStatus } from './cli/status.js';
 import { runRebuild } from './cli/rebuild.js';
 import { runDossierCmd } from './cli/dossier.js';
 import { runEmit } from './cli/emit.js';
+import { runEdit } from './cli/edit.js';
+import { runDiff } from './cli/diff.js';
+import { runRollback } from './cli/rollback.js';
 import { createAnthropicClient } from './synthesize/index.js';
 import { parseWindow } from './ingest/window.js';
 import { jsonlSource } from './ingest/jsonl.js';
@@ -42,7 +45,7 @@ program.command('status')
   });
 
 program.command('rebuild')
-  .option('--scope <s>')
+  .option('--scope <s>', 'global | project')
   .option('--window <w>', 'e.g. 90d or 500s', '90d')
   .option('--no-jsonl')
   .option('--no-git')
@@ -79,7 +82,7 @@ program.command('rebuild')
   });
 
 program.command('dossier')
-  .option('--scope <s>')
+  .option('--scope <s>', 'global | project')
   .option('--pretty', '', false)
   .action((opts) => {
     const scope = detectScope(process.cwd(), opts.scope);
@@ -89,11 +92,33 @@ program.command('dossier')
   });
 
 program.command('emit')
-  .option('--scope <s>')
+  .option('--scope <s>', 'global | project')
   .action((opts) => {
     const scope = detectScope(process.cwd(), opts.scope);
     runEmit(scope);
     console.log('Emitted CLAUDE.md');
+  });
+
+program.command('edit')
+  .option('--scope <s>', 'global | project')
+  .action((opts) => {
+    const { path, exists } = runEdit(detectScope(process.cwd(), opts.scope));
+    console.log(`Open this file in your editor:\n  ${path}`);
+    if (!exists) console.log('(File does not exist yet — run `persona init` first.)');
+  });
+
+program.command('diff')
+  .option('--scope <s>', 'global | project')
+  .action((opts) => {
+    console.log(JSON.stringify(runDiff(detectScope(process.cwd(), opts.scope)), null, 2));
+  });
+
+program.command('rollback')
+  .option('--scope <s>', 'global | project')
+  .option('--to <timestamp>', 'substring of a previous profile filename (default: most recent)')
+  .action((opts) => {
+    const restored = runRollback(detectScope(process.cwd(), opts.scope), opts.to);
+    console.log(`Restored ${restored}`);
   });
 
 program.parseAsync().catch((e) => { console.error(e.message); process.exit(1); });
