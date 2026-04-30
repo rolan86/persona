@@ -10,6 +10,7 @@ import { runEdit } from './cli/edit.js';
 import { runDiff } from './cli/diff.js';
 import { runRollback } from './cli/rollback.js';
 import { createAnthropicClient } from './synthesize/index.js';
+import { createClaudeCodeClient } from './synthesize/claude-code.js';
 import { parseWindow } from './ingest/window.js';
 import { jsonlSource } from './ingest/jsonl.js';
 import { createGitSource } from './ingest/git.js';
@@ -74,9 +75,11 @@ program.command('rebuild')
         console.warn(`Helix source skipped: ${helixDir} not found (set PERSONA_HELIX_DIR to override).`);
       }
     }
+    const llmBackend = process.env.PERSONA_LLM ?? 'claude-code';
+    const llm = llmBackend === 'api' ? createAnthropicClient() : createClaudeCodeClient();
     await runRebuild({
       scope, sources, window: parseWindow(opts.window),
-      llm: createAnthropicClient(), identity: overrides.identity,
+      llm, identity: overrides.identity,
       yes: opts.yes, dryRun: opts.dryRun,
     });
   });
