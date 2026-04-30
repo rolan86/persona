@@ -21,6 +21,7 @@ import { existsSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 import type { SourceReader } from './ingest/types.js';
+import type { Scope } from './paths.js';
 
 const program = new Command();
 program.name('persona').description('Build a typed Profile of your coding preferences').version('0.1.0');
@@ -30,7 +31,11 @@ program.command('init')
   .option('--share', 'Track overrides in git (for per-project shared profiles)', false)
   .option('--scope <s>', 'global | project')
   .action((opts) => {
-    const scope = detectScope(process.cwd(), opts.scope);
+    const scope: Scope = opts.scope === 'project'
+      ? { scope: 'project', projectRoot: process.cwd() }
+      : opts.scope === 'global'
+        ? { scope: 'global' }
+        : detectScope(process.cwd());
     if (scope.scope === 'global' && opts.share) throw new Error('--share only valid with --scope project');
     runInit({ ...scope, share: opts.share });
     console.log(`Initialized persona at ${scope.scope === 'global' ? '~/.persona' : scope.projectRoot + '/.persona'}`);
