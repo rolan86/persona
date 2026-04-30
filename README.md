@@ -29,7 +29,7 @@ Helix           evidence
 Until persona is published to npm, install from a clone:
 
 ```sh
-git clone https://github.com/merryldmello/persona.git
+git clone https://github.com/rolan86/persona.git
 cd persona
 npm install
 npm run build
@@ -91,9 +91,8 @@ A persona scope is either global (`~/.persona`, with `CLAUDE.md` at `~/.claude/C
 - `profile.generated.yaml` — the LLM-synthesized profile. Overwritten by `rebuild --yes`.
 - `profile.overrides.yaml` — your hand edits. Merged on top of the generated profile at emit time.
 - `dossier.json` — the grouped evidence the last synthesis ran against.
-- `previous/` — rotated snapshots of `profile.generated.yaml` from previous rebuilds. `rollback` restores from here.
-- `state.json` — small bookkeeping state.
-- `.gitignore` — by default ignores everything generated; `init --share` keeps overrides tracked for shared per-project profiles.
+- `previous/` — rotated snapshots of `profile.generated.yaml` from previous rebuilds (most recent 5 kept). `rollback` restores from here.
+- `.gitignore` — written by `init`. By default it ignores everything inside `.persona/`; `init --share` keeps `profile.overrides.yaml` tracked for shared per-project profiles.
 
 The fence written into `CLAUDE.md` looks like:
 
