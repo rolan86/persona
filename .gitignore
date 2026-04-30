@@ -8,3 +8,6 @@ build/
 coverage/
 .vscode/
 .idea/
+
+# persona local data (per-user, never committed)
+.persona/
