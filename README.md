@@ -144,3 +144,7 @@ Implementation plan: [`docs/plans/2026-04-18-persona-v1.md`](docs/plans/2026-04-
 ## License
 
 MIT. See [`LICENSE`](LICENSE).
+
+## Author
+
+Built by [Merryl D'Mello](https://reposition.dev). I build practical AI tooling for developers and write about AI workflows at [REPOSITION](https://reposition.dev).
